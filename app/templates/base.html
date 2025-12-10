@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Gestor de Tareas</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
+    <script src="https://kit.fontawesome.com/ee9903c79f.js" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        nav.navbar {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .navbar-item.brand {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: #667eea;
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 3rem 1.5rem;
+            margin-bottom: 3rem;
+            border-radius: 15px;
+        }
+        
+        .hero-section h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .hero-section p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .task-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+            transition: all 0.3s ease;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            border-left: 5px solid #667eea;
+        }
+        
+        .task-card:hover {
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px);
+        }
+        
+        .task-card.priority-alta {
+            border-left-color: #f14668;
+        }
+        
+        .task-card.priority-media {
+            border-left-color: #ffdd57;
+        }
+        
+        .task-card.priority-baja {
+            border-left-color: #48c774;
+        }
+        
+        .task-header {
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+        }
+        
+        .task-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin: 0;
+        }
+        
+        .task-badges {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 0.75rem;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        
+        .badge-priority {
+            background-color: #f5f5f5;
+        }
+        
+        .badge-status {
+            background-color: #f5f5f5;
+        }
+        
+        .badge-alta { color: #f14668; }
+        .badge-media { color: #ffb800; }
+        .badge-baja { color: #48c774; }
+        
+        .badge-pendiente { color: #b5bdc1; }
+        .badge-ejecutandose { color: #3273dc; }
+        .badge-finalizada { color: #48c774; }
+        
+        .task-dates {
+            padding: 0 1.5rem 1.5rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            border-top: 1px solid #ececec;
+        }
+        
+        .date-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: #5a6c7d;
+            font-size: 0.95rem;
+        }
+        
+        .date-item i {
+            color: #667eea;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(102, 126, 234, 0.4);
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: white;
+        }
+        
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.7;
+        }
+        
+        .empty-state h2 {
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+        
+        .empty-state p {
+            opacity: 0.8;
+        }
+        
+        .container-main {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <div class="navbar-item brand">
+                <i class="fas fa-tasks"></i>&nbsp; Gestor de Tareas Enrique Villeda García
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container-main">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

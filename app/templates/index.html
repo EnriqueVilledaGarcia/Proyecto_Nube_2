@@ -1,0 +1,185 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+  body {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 40px 20px;
+  }
+  .dashboard-header {
+    margin-bottom: 40px;
+  }
+  .task-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+    margin-top: 30px;
+  }
+  .task-card {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s, box-shadow 0.3s;
+    border-left: 5px solid;
+  }
+  .task-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+  }
+  .task-card.alta {
+    border-left-color: #f14668;
+  }
+  .task-card.media {
+    border-left-color: #ffdd57;
+  }
+  .task-card.baja {
+    border-left-color: #48c774;
+  }
+  .task-title {
+    font-size: 1.3em;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 15px;
+    word-break: break-word;
+  }
+  .task-meta {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+  }
+  .priority-badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85em;
+    font-weight: 600;
+    color: white;
+  }
+  .priority-alta {
+    background: #f14668;
+  }
+  .priority-media {
+    background: #ffdd57;
+    color: #333;
+  }
+  .priority-baja {
+    background: #48c774;
+  }
+  .status-badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85em;
+    font-weight: 600;
+    color: white;
+  }
+  .status-pendiente {
+    background: #b5b5b5;
+  }
+  .status-ejecutandose {
+    background: #3273dc;
+  }
+  .status-finalizada {
+    background: #48c774;
+  }
+  .task-details {
+    font-size: 0.9em;
+    color: #666;
+    margin-bottom: 15px;
+    line-height: 1.6;
+  }
+  .task-details strong {
+    color: #333;
+  }
+  .btn-new-task {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 25px;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  }
+  .btn-new-task:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+  }
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: white;
+  }
+  .empty-state h2 {
+    font-size: 2em;
+    margin-bottom: 15px;
+  }
+  .empty-state p {
+    font-size: 1.1em;
+    margin-bottom: 30px;
+    opacity: 0.9;
+  }
+  .header-title {
+    color: white;
+    font-size: 2.5em;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .header-subtitle {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1.1em;
+  }
+</style>
+
+<div class="dashboard-header">
+  <div class="header-title"> Gestor de Tareas</div>
+  <div class="header-subtitle">Organiza y administra tus tareas de manera eficiente</div>
+</div>
+
+<a href="{{ url_for('tareas.nueva_tarea') }}" class="btn-new-task">
+  <i class="fa-solid fa-plus"></i> Nueva Tarea
+</a>
+
+{% if tareas %}
+  <div class="task-grid">
+    {% for tarea in tareas %}
+    <div class="task-card {{ tarea.prioridad }}">
+      <div class="task-title">{{ tarea.nombre }}</div>
+      
+      <div class="task-meta">
+        <span class="priority-badge priority-{{ tarea.prioridad }}">
+          <i class="fa-solid fa-signal"></i> {{ tarea.prioridad|upper }}
+        </span>
+        <span class="status-badge status-{{ tarea.estatus }}">
+          <i class="fa-solid fa-circle"></i> {{ tarea.estatus|upper }}
+        </span>
+      </div>
+      
+      <div class="task-details">
+        <div><strong>📅 Inicio:</strong> {{ tarea.fecha_inicio.strftime('%d/%m/%Y') }}
+          {% if tarea.hora_inicio %}
+            a las {{ tarea.hora_inicio }}
+          {% endif %}
+        </div>
+        {% if tarea.fecha_fin %}
+          <div><strong>📅 Fin:</strong> {{ tarea.fecha_fin.strftime('%d/%m/%Y') }}
+            {% if tarea.hora_fin %}
+              a las {{ tarea.hora_fin }}
+            {% endif %}
+          </div>
+        {% else %}
+          <div><strong>📅 Fin:</strong> <em>No especificada</em></div>
+        {% endif %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <div class="empty-state">
+    <h2>🎯 Sin tareas</h2>
+    <p>No hay tareas aún. ¡Haz clic en "Nueva Tarea" para comenzar!</p>
+  </div>
+{% endif %}
+{% endblock %}

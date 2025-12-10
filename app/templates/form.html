@@ -1,0 +1,184 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+  body {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 40px 20px;
+  }
+  .form-container {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  .form-card {
+    background: white;
+    border-radius: 12px;
+    padding: 40px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  }
+  .form-title {
+    font-size: 2em;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 30px;
+    text-align: center;
+  }
+  .form-group {
+    margin-bottom: 25px;
+  }
+  .form-label {
+    display: block;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 8px;
+    font-size: 0.95em;
+  }
+  .form-input,
+  .form-select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1em;
+    transition: border-color 0.3s;
+    box-sizing: border-box;
+  }
+  .form-input:focus,
+  .form-select:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  }
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  .form-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 35px;
+    justify-content: center;
+  }
+  .btn {
+    padding: 12px 30px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .btn-save {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    flex: 1;
+  }
+  .btn-save:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+  }
+  .btn-cancel {
+    background: #f0f0f0;
+    color: #333;
+    flex: 1;
+  }
+  .btn-cancel:hover {
+    background: #e0e0e0;
+    transform: translateY(-2px);
+  }
+  .form-subtitle {
+    color: #666;
+    margin-bottom: 5px;
+    font-size: 0.9em;
+  }
+  @media (max-width: 600px) {
+    .form-row {
+      grid-template-columns: 1fr;
+    }
+    .form-card {
+      padding: 25px;
+    }
+    .form-title {
+      font-size: 1.5em;
+    }
+  }
+</style>
+
+<div class="form-container">
+  <div class="form-card">
+    <div class="form-title">📝 {% if tarea %}Editar Tarea{% else %}Nueva Tarea{% endif %}</div>
+    
+    <form method="POST">
+      <!-- Nombre de la tarea -->
+      <div class="form-group">
+        <label class="form-label" for="nombre">Nombre de la tarea</label>
+        <input class="form-input" type="text" id="nombre" name="nombre" required
+          placeholder="Ej: Completar reporte trimestral"
+          value="{{ tarea.nombre if tarea else '' }}">
+      </div>
+
+      <!-- Prioridad -->
+      <div class="form-group">
+        <label class="form-label" for="prioridad">Prioridad</label>
+        <select class="form-select" id="prioridad" name="prioridad" required>
+          <option value="">Selecciona una prioridad</option>
+          <option value="baja" {% if tarea and tarea.prioridad == 'baja' %}selected{% endif %}>🟢 Baja</option>
+          <option value="media" {% if tarea and tarea.prioridad == 'media' %}selected{% endif %}>🟡 Media</option>
+          <option value="alta" {% if tarea and tarea.prioridad == 'alta' %}selected{% endif %}>🔴 Alta</option>
+        </select>
+      </div>
+
+      <!-- Fecha y hora de inicio -->
+      <div class="form-group">
+        <label class="form-label">Fecha y hora de inicio</label>
+        <div class="form-row">
+          <div>
+            <input class="form-input" type="date" name="fecha_inicio" required
+              value="{{ tarea.fecha_inicio.strftime('%Y-%m-%d') if tarea else '' }}">
+          </div>
+          <div>
+            <input class="form-input" type="time" name="hora_inicio"
+              value="{{ tarea.hora_inicio if tarea and tarea.hora_inicio else '' }}">
+          </div>
+        </div>
+      </div>
+
+      <!-- Fecha y hora de fin -->
+      <div class="form-group">
+        <label class="form-label">Fecha y hora de fin (opcional)</label>
+        <div class="form-row">
+          <div>
+            <input class="form-input" type="date" name="fecha_fin"
+              value="{{ tarea.fecha_fin.strftime('%Y-%m-%d') if tarea and tarea.fecha_fin else '' }}">
+          </div>
+          <div>
+            <input class="form-input" type="time" name="hora_fin"
+              value="{{ tarea.hora_fin if tarea and tarea.hora_fin else '' }}">
+          </div>
+        </div>
+      </div>
+
+      <!-- Estatus -->
+      <div class="form-group">
+        <label class="form-label" for="estatus">Estatus</label>
+        <select class="form-select" id="estatus" name="estatus">
+          <option value="pendiente" {% if not tarea or tarea.estatus == 'pendiente' %}selected{% endif %}>⏳ Pendiente</option>
+          <option value="ejecutandose" {% if tarea and tarea.estatus == 'ejecutandose' %}selected{% endif %}>▶️ En ejecución</option>
+          <option value="finalizada" {% if tarea and tarea.estatus == 'finalizada' %}selected{% endif %}>✅ Finalizada</option>
+        </select>
+      </div>
+
+      <!-- Botones de acción -->
+      <div class="form-actions">
+        <button class="btn btn-save" type="submit">
+          <i class="fa-solid fa-floppy-disk"></i> Guardar
+        </button>
+        <a class="btn btn-cancel" href="{{ url_for('tareas.listar_tareas') }}">
+          <i class="fa-solid fa-arrow-left"></i> Regresar
+        </a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
