@@ -26,10 +26,11 @@ from app.routes.tarea import tarea_bp
 with app.app_context():
     db.create_all()
     
-
+app.register_blueprint(tarea_bp, url_prefix='/tareas')
 
 
 #Ruta principal home
 @app.route('/')
 def index():
-    return "¡Bienvenido a la aplicación de gestión de tareas!"
+    tareas = Tarea.query.all()
+    return render_template('index.html', tareas=tareas)
