@@ -2,7 +2,7 @@
 {% block content %}
 <style>
   body {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
     min-height: 100vh;
     padding: 40px 20px;
   }
@@ -16,30 +16,34 @@
     margin-top: 30px;
   }
   .task-card {
-    background: white;
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
     border-radius: 12px;
     padding: 25px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-    transition: transform 0.3s, box-shadow 0.3s;
-    border-left: 5px solid;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 20px rgba(212, 175, 55, 0.1);
+    transition: all 0.3s;
+    border: 2px solid #334155;
+    border-top: 3px solid;
+    display: flex;
+    flex-direction: column;
   }
   .task-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5), 0 0 30px rgba(212, 175, 55, 0.2);
+    border-color: #d4af37;
   }
   .task-card.alta {
-    border-left-color: #f14668;
+    border-top-color: #ff6b6b;
   }
   .task-card.media {
-    border-left-color: #ffdd57;
+    border-top-color: #ffd43b;
   }
   .task-card.baja {
-    border-left-color: #48c774;
+    border-top-color: #51cf66;
   }
   .task-title {
     font-size: 1.3em;
     font-weight: 600;
-    color: #333;
+    color: #e2e8f0;
     margin-bottom: 15px;
     word-break: break-word;
   }
@@ -48,6 +52,7 @@
     gap: 10px;
     margin-bottom: 15px;
     flex-wrap: wrap;
+    align-items: center;
   }
   .priority-badge {
     padding: 6px 12px;
@@ -57,14 +62,14 @@
     color: white;
   }
   .priority-alta {
-    background: #f14668;
+    background: #ff6b6b;
   }
   .priority-media {
-    background: #ffdd57;
+    background: #ffd43b;
     color: #333;
   }
   .priority-baja {
-    background: #48c774;
+    background: #51cf66;
   }
   .status-badge {
     padding: 6px 12px;
@@ -74,47 +79,49 @@
     color: white;
   }
   .status-pendiente {
-    background: #b5b5b5;
+    background: #64748b;
   }
   .status-ejecutandose {
-    background: #3273dc;
+    background: #3b82f6;
   }
   .status-finalizada {
-    background: #48c774;
+    background: #51cf66;
   }
   .task-details {
     font-size: 0.9em;
-    color: #666;
+    color: #cbd5e1;
     margin-bottom: 15px;
     line-height: 1.6;
+    flex-grow: 1;
   }
   .task-details strong {
-    color: #333;
+    color: #e2e8f0;
   }
   .btn-new-task {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
+    background: linear-gradient(135deg, #d4af37 0%, #b8960f 100%);
+    color: #0f172a;
     border: none;
     padding: 12px 30px;
     border-radius: 25px;
     font-size: 1em;
     font-weight: 600;
     cursor: pointer;
-    transition: transform 0.3s, box-shadow 0.3s;
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    transition: all 0.3s;
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
   }
   .btn-new-task:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+    box-shadow: 0 6px 25px rgba(212, 175, 55, 0.6);
   }
   .empty-state {
     text-align: center;
     padding: 60px 20px;
-    color: white;
+    color: #cbd5e1;
   }
   .empty-state h2 {
     font-size: 2em;
     margin-bottom: 15px;
+    color: #d4af37;
   }
   .empty-state p {
     font-size: 1.1em;
@@ -122,40 +129,61 @@
     opacity: 0.9;
   }
   .header-title {
-    color: white;
+    color: #d4af37;
     font-size: 2.5em;
     font-weight: 700;
     margin-bottom: 10px;
+    letter-spacing: 0.5px;
   }
   .header-subtitle {
-    color: rgba(255, 255, 255, 0.9);
+    color: #cbd5e1;
     font-size: 1.1em;
   }
   .task-actions {
-    margin-top: 15px;
+    margin-top: auto;
     padding-top: 15px;
-    border-top: 1px solid #e0e0e0;
+    border-top: 1px solid #334155;
     display: flex;
     gap: 10px;
   }
   .btn-edit {
     flex: 1;
     padding: 10px 20px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
+    background: linear-gradient(135deg, #d4af37 0%, #b8960f 100%);
+    color: #0f172a;
     border: none;
     border-radius: 8px;
     font-size: 0.9em;
     font-weight: 600;
     cursor: pointer;
-    transition: transform 0.3s, box-shadow 0.3s;
+    transition: all 0.3s;
     text-align: center;
     text-decoration: none;
     display: inline-block;
   }
   .btn-edit:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+  }
+  .btn-delete {
+    flex: 1;
+    padding: 10px 20px;
+    background: #ff6b6b;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.9em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .btn-delete:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+    background: #ff5252;
   }
 </style>
 
@@ -204,6 +232,11 @@
         <a href="{{ url_for('tareas.editar_tarea', id=tarea.id) }}" class="btn-edit">
           <i class="fa-solid fa-pen-to-square"></i> Editar
         </a>
+        <form method="POST" action="{{ url_for('tareas.eliminar_tarea', id=tarea.id) }}" style="flex: 1;">
+          <button type="submit" class="btn-delete" style="width: 100%;">
+            <i class="fa-solid fa-trash"></i> Eliminar
+          </button>
+        </form>
       </div>
     </div>
     {% endfor %}
