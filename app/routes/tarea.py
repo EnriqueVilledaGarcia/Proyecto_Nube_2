@@ -34,3 +34,27 @@ def nueva_tarea():
         db.session.commit()
         return redirect(url_for('tareas.listar_tareas'))
     return render_template('form.html')
+
+@tarea_bp.route('/editar/<int:id>', methods=['GET', 'POST'])
+def editar_tarea(id):
+    tarea = Tarea.query.get_or_404(id)
+    
+    if request.method == 'POST':
+        tarea.nombre = request.form['nombre']
+        tarea.prioridad = request.form['prioridad']
+        tarea.fecha_inicio = datetime.strptime(request.form['fecha_inicio'], '%Y-%m-%d') if request.form['fecha_inicio'] else datetime.utcnow()
+        tarea.hora_inicio = request.form.get('hora_inicio', '')
+        tarea.fecha_fin = datetime.strptime(request.form['fecha_fin'], '%Y-%m-%d') if request.form['fecha_fin'] else None
+        tarea.hora_fin = request.form.get('hora_fin', '')
+        tarea.estatus = request.form.get('estatus', 'pendiente')
+        
+        # Actualizar campos vacíos a None
+        if not tarea.hora_inicio:
+            tarea.hora_inicio = None
+        if not tarea.hora_fin:
+            tarea.hora_fin = None
+        
+        db.session.commit()
+        return redirect(url_for('tareas.listar_tareas'))
+    
+    return render_template('form.html', tarea=tarea)

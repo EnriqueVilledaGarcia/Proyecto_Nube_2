@@ -131,6 +131,32 @@
     color: rgba(255, 255, 255, 0.9);
     font-size: 1.1em;
   }
+  .task-actions {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #e0e0e0;
+    display: flex;
+    gap: 10px;
+  }
+  .btn-edit {
+    flex: 1;
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.9em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .btn-edit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  }
 </style>
 
 <div class="dashboard-header">
@@ -172,6 +198,12 @@
         {% else %}
           <div><strong>📅 Fin:</strong> <em>No especificada</em></div>
         {% endif %}
+      </div>
+      
+      <div class="task-actions">
+        <a href="{{ url_for('tareas.editar_tarea', id=tarea.id) }}" class="btn-edit">
+          <i class="fa-solid fa-pen-to-square"></i> Editar
+        </a>
       </div>
     </div>
     {% endfor %}
