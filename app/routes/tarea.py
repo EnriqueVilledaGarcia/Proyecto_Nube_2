@@ -58,3 +58,10 @@ def editar_tarea(id):
         return redirect(url_for('tareas.listar_tareas'))
     
     return render_template('form.html', tarea=tarea)
+
+@tarea_bp.route('/eliminar/<int:id>', methods=['POST'])
+def eliminar_tarea(id):
+    tarea = Tarea.query.get_or_404(id)
+    db.session.delete(tarea)
+    db.session.commit()
+    return redirect(url_for('tareas.listar_tareas'))
